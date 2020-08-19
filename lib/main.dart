@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:kart_list/modelo/Products.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List _kart_list = List();
+  List<Product> _kart_list = List();
   @override
   void setState(fn) {
     print(_kart_list);
@@ -40,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     String producto;
+    Product product = Product();
     return Scaffold(
       appBar: AppBar(
         title: Text("Lista de compras"),
@@ -55,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Expanded(
                       child: TextField(
+                        style: TextStyle(fontSize: 30),
                         decoration: InputDecoration(
                             hintText: "Ingrese el producto a su lista",
                             hintStyle: TextStyle(
@@ -66,17 +69,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     Expanded(
-                      child: Container(
-                          // color: Colors.black38,
-                          child: FlatButton(
-                              color: Colors.blue,
-                              child: Text("Agregar a la lista"),
-                              onPressed: () {
-                                setState(() {
-                                  _kart_list.add(producto);
-                                  print(_kart_list);
-                                });
-                              })),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            // color: Colors.black38,
+                            child: FlatButton(
+                                color: Colors.blue,
+                                child: Text("Agregar a la lista"),
+                                onPressed: () {
+                                  setState(() {
+                                    product.name = producto;
+                                    product.value = false;
+                                    product.color = Colors.white;
+                                    _kart_list.add(product);
+                                    print(_kart_list);
+                                  });
+                                })),
+                      ),
                     )
                   ],
                 ),
@@ -95,19 +104,27 @@ class _MyHomePageState extends State<MyHomePage> {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
+                              color: _kart_list[index].color,
                               child: Row(
                                 children: [
                                   Expanded(
                                       child: CheckboxListTile(
-                                    title: Text(_kart_list[index].toString()),
-                                    value: timeDilation != 1.0,
+                                    checkColor: Colors.black,
+                                    title: Text(_kart_list[index].name),
+                                    value: _kart_list[index].value,
                                     onChanged: (bool value) {
                                       setState(() {
-                                        timeDilation = value ? 10.0 : 1.0;
+                                        _kart_list[index].value = value;
+                                        if (value) {
+                                          _kart_list[index].color =
+                                              Colors.green;
+                                        } else {
+                                          _kart_list[index].color =
+                                              Colors.white;
+                                        }
                                       });
                                     },
-                                    secondary:
-                                        const Icon(Icons.hourglass_empty),
+                                    secondary: Icon(Icons.insert_emoticon),
                                   )),
                                 ],
                               ),
