@@ -6,7 +6,7 @@ class Presentation extends StatelessWidget {
   Widget build(BuildContext context) {
     final _screensize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.greenAccent,
+      backgroundColor: Colors.white,
       body: Container(
         width: _screensize.width,
         height: _screensize.height,
@@ -15,20 +15,25 @@ class Presentation extends StatelessWidget {
             Expanded(
                 flex: 3,
                 child: FadeInImage(
-                    placeholder: AssetImage("assets/images/karrito.jpg"),
-                    image: AssetImage("assets/images/karrito.jpg"))),
+                    placeholder: AssetImage(
+                        "assets/images/logo_negro_amarillo_zoco.png"),
+                    image: AssetImage(
+                        "assets/images/logo_negro_amarillo_zoco.png"))),
             Container(
               width: _screensize.width / 2,
               child: FittedBox(
                 child: FlatButton(
-                    color: Colors.blueAccent,
+                    color: Colors.yellow,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => PageList()),
                       );
                     },
-                    child: Text("Empezar")),
+                    child: Text(
+                      "Empezar",
+                      style: TextStyle(color: Colors.black),
+                    )),
               ),
             ),
             Container(
