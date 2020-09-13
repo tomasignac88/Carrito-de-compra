@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kart_list/pages/pages_list.dart';
+import 'package:ZocoKarrito/pages/pages_list.dart';
 
 class Presentation extends StatelessWidget {
   @override
@@ -40,7 +40,7 @@ class Presentation extends StatelessWidget {
                 height: _screensize.height / 3,
                 child: FittedBox(
                   child: Text(
-                    "KARTLIST",
+                    "ZocoKarrito",
                     style: TextStyle(decoration: TextDecoration.overline),
                   ),
                 )),

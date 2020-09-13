@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kart_list/pages/pages_list.dart';
-import 'package:kart_list/pages/pages_presentation.dart';
+import 'package:ZocoKarrito/pages/pages_list.dart';
+import 'package:ZocoKarrito/pages/pages_presentation.dart';
 
 Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{

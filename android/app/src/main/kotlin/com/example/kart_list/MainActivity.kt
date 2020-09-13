@@ -1,4 +1,4 @@
-package com.example.kart_list
+package com.example.ZocoKarrito
 
 import io.flutter.embedding.android.FlutterActivity
 

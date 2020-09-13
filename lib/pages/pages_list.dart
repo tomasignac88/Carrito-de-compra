@@ -1,4 +1,4 @@
-import 'package:kart_list/modelo/Products.dart';
+import 'package:ZocoKarrito/modelo/Products.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class PageList extends StatefulWidget {
 }
 
 class _PageListState extends State<PageList> {
-  List<Product> _kart_list = List();
+  List<Product> _ZocoKarrito = List();
   List<String> listProducts = List();
   String producto;
   String price;
@@ -62,12 +62,12 @@ class _PageListState extends State<PageList> {
     return Container(
       child: ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: _kart_list.length,
+          itemCount: _ZocoKarrito.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                color: _kart_list[index].color,
+                color: _ZocoKarrito[index].color,
                 child: Row(
                   children: [
                     Expanded(
@@ -79,8 +79,8 @@ class _PageListState extends State<PageList> {
                                 child: Icon(Icons.clear),
                                 onTap: () {
                                   setState(() {
-                                    _total = _total - _kart_list[index].price;
-                                    _kart_list.removeAt(index);
+                                    _total = _total - _ZocoKarrito[index].price;
+                                    _ZocoKarrito.removeAt(index);
                                   });
                                 },
                               ),
@@ -88,15 +88,17 @@ class _PageListState extends State<PageList> {
                               child: Container(
                                 child: CheckboxListTile(
                                   checkColor: Colors.black,
-                                  title: Text(_kart_list[index].name),
-                                  value: _kart_list[index].value,
+                                  title: Text(_ZocoKarrito[index].name),
+                                  value: _ZocoKarrito[index].value,
                                   onChanged: (bool value) {
                                     setState(() {
-                                      _kart_list[index].value = value;
+                                      _ZocoKarrito[index].value = value;
                                       if (value) {
-                                        _kart_list[index].color = Colors.green;
+                                        _ZocoKarrito[index].color =
+                                            Colors.green;
                                       } else {
-                                        _kart_list[index].color = Colors.white;
+                                        _ZocoKarrito[index].color =
+                                            Colors.white;
                                       }
                                     });
                                   },
@@ -117,10 +119,10 @@ class _PageListState extends State<PageList> {
                           ),
                           onChanged: (texto) {
                             setState(() {
-                              _kart_list[index].price = double.parse(texto);
+                              _ZocoKarrito[index].price = double.parse(texto);
                               _total = 0;
-                              for (var i = 0; i < _kart_list.length; i++) {
-                                _total += _kart_list[i].price;
+                              for (var i = 0; i < _ZocoKarrito.length; i++) {
+                                _total += _ZocoKarrito[i].price;
                               }
                             });
                           },
@@ -164,7 +166,7 @@ class _PageListState extends State<PageList> {
                     SweetAlert.show(context,
                         title: "Lista limpia!", style: SweetAlertStyle.success);
                     setState(() {
-                      _kart_list.clear();
+                      _ZocoKarrito.clear();
                     });
                   })
             ]),
@@ -183,7 +185,7 @@ class _PageListState extends State<PageList> {
                     SweetAlert.show(context,
                         title: "Lista limpia!", style: SweetAlertStyle.success);
                     setState(() {
-                      _kart_list.clear();
+                      _ZocoKarrito.clear();
                       _total = 0;
                     });
                   })
@@ -239,7 +241,7 @@ class _PageListState extends State<PageList> {
                                     product.name = producto;
                                     product.value = false;
                                     product.color = Colors.white;
-                                    _kart_list.add(product);
+                                    _ZocoKarrito.add(product);
                                     addStringToSF(producto, listProducts);
                                     FocusScope.of(context).unfocus();
                                   });
@@ -317,10 +319,10 @@ class _PageListState extends State<PageList> {
                 temp.name = item;
                 temp.color = Colors.white;
                 temp.value = false;
-                _kart_list.add(temp);
+                _ZocoKarrito.add(temp);
                 i++;
               }
-              // print(_kart_list);
+              // print(_ZocoKarrito);
               return Column(children: [
                 Expanded(
                   child: Container(child: boxlistproducts()),

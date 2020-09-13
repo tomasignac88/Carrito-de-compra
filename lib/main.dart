@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kart_list/pages/pages_presentation.dart';
+import 'package:ZocoKarrito/pages/pages_presentation.dart';
 
 void main() {
   runApp(Kartlist());

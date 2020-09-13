@@ -1,4 +1,4 @@
-import 'package:kart_list/modelo/Products.dart';
+import 'package:ZocoKarrito/modelo/Products.dart';
 
 class KartList {
   List<Product> products = [];
