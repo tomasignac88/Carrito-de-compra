@@ -132,13 +132,6 @@ class _PageListState extends State<PageList> {
                                 color: Colors.black),
                           ),
                           onChanged: (texto) {
-                            setState(() {
-                              _kartlist[index].price = double.parse(texto);
-                              _total = 0;
-                              for (var i = 0; i < _kartlist.length; i++) {
-                                _total += _kartlist[i].price;
-                              }
-                            });
                             _zocoKarrito[index].price = double.parse(texto);
                           },
                         ),
