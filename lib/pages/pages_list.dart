@@ -1,4 +1,5 @@
 import 'package:ZocoKarrito/modelo/Products.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class PageList extends StatefulWidget {
 }
 
 class _PageListState extends State<PageList> {
-  List<Product> _kartlist = List();
+  //DEFINO VARIABLES A UTILIZAR
+  List<Product> _zocoKarrito = List();
   List<String> listProducts = List();
   Product product = Product();
   String producto;
@@ -20,6 +22,7 @@ class _PageListState extends State<PageList> {
   double _total = 0;
   bool _sharedpreferences = true;
   TextEditingController _controllerTextEditing;
+  TextEditingController _controllerTextEditing2;
   @override
   void initState() {
     super.initState();
@@ -63,12 +66,12 @@ class _PageListState extends State<PageList> {
     return Container(
       child: ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: _kartlist.length,
+          itemCount: _zocoKarrito.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                color: _kartlist[index].color,
+                color: _zocoKarrito[index].color,
                 child: Row(
                   children: [
                     Expanded(
@@ -80,11 +83,13 @@ class _PageListState extends State<PageList> {
                                 child: Icon(Icons.clear),
                                 onTap: () {
                                   setState(() {
-                                    _kartlist[index].price == null
+                                    _zocoKarrito[index].price == null
                                         ? _total = _total
                                         : _total =
-                                            _total - _kartlist[index].price;
-                                    _kartlist.removeAt(index);
+                                            _total - _zocoKarrito[index].price;
+                                    _zocoKarrito.removeAt(index);
+                                    cleanSF();
+                                    addListStringToSF(_zocoKarrito);
                                   });
                                 },
                               ),
@@ -92,15 +97,17 @@ class _PageListState extends State<PageList> {
                               child: Container(
                                 child: CheckboxListTile(
                                   checkColor: Colors.black,
-                                  title: Text(_kartlist[index].name),
-                                  value: _kartlist[index].value,
+                                  title: Text(_zocoKarrito[index].name),
+                                  value: _zocoKarrito[index].value,
                                   onChanged: (bool value) {
                                     setState(() {
-                                      _kartlist[index].value = value;
+                                      _zocoKarrito[index].value = value;
                                       if (value) {
-                                        _kartlist[index].color = Colors.green;
+                                        _zocoKarrito[index].color =
+                                            Colors.green;
                                       } else {
-                                        _kartlist[index].color = Colors.white;
+                                        _zocoKarrito[index].color =
+                                            Colors.white;
                                       }
                                     });
                                   },
@@ -113,6 +120,11 @@ class _PageListState extends State<PageList> {
                         child: TextField(
                           controller: _controllerTextEditing,
                           style: TextStyle(fontSize: 20),
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(12),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r"^\d+\.?\d{0,2}"))
+                          ],
                           decoration: InputDecoration(
                             hintText: "\$ 0.00",
                             hintStyle: TextStyle(
@@ -127,6 +139,7 @@ class _PageListState extends State<PageList> {
                                 _total += _kartlist[i].price;
                               }
                             });
+                            _zocoKarrito[index].price = double.parse(texto);
                           },
                         ),
                       ),
@@ -139,6 +152,7 @@ class _PageListState extends State<PageList> {
     );
   }
 
+  //LOGICA DEL MENU HAMBURGUESA (HERRAMIENTAS)
   Drawer drawer() {
     final _screensize = MediaQuery.of(context).size;
     return Drawer(
@@ -168,7 +182,7 @@ class _PageListState extends State<PageList> {
                     SweetAlert.show(context,
                         title: "Lista limpia!", style: SweetAlertStyle.success);
                     setState(() {
-                      _kartlist.clear();
+                      cleanSF(); //LIMPIA SharedPreferences
                     });
                   })
             ]),
@@ -187,7 +201,7 @@ class _PageListState extends State<PageList> {
                     SweetAlert.show(context,
                         title: "Lista limpia!", style: SweetAlertStyle.success);
                     setState(() {
-                      _kartlist.clear();
+                      _zocoKarrito.clear(); //LIMPIA LISTA
                       _total = 0;
                     });
                   })
@@ -198,6 +212,7 @@ class _PageListState extends State<PageList> {
     );
   }
 
+  //LOGICA DE TEXTFIELD QUE AGREGA LOS PRODUCTOS A LA LISTA Y AL SharedPreferences
   Widget textfield() {
     return Expanded(
       child: Container(
@@ -205,7 +220,7 @@ class _PageListState extends State<PageList> {
           children: [
             Expanded(
               child: TextField(
-                controller: _controllerTextEditing,
+                controller: _controllerTextEditing2,
                 style: TextStyle(fontSize: 30),
                 decoration: InputDecoration(
                     hoverColor: Colors.yellow,
@@ -218,9 +233,8 @@ class _PageListState extends State<PageList> {
                         fontWeight: FontWeight.w300, color: Colors.black),
                     suffixIcon: IconButton(
                       onPressed: () {
-                        setState(() {
-                          _controllerTextEditing.clear();
-                        });
+                        // FocusScope.of(context).unfocus();
+                        // _controllerTextEditing2.clear();FUTURO DESARROLLO PARA LIMPIAR EL INPUT (POSIBLE ERROR DE VERSION QUE NO FUNCIONA)
                       },
                       icon: Icon(Icons.clear),
                     )),
@@ -249,8 +263,8 @@ class _PageListState extends State<PageList> {
                                     product.name = producto;
                                     product.value = false;
                                     product.color = Colors.white;
-                                    _kartlist.add(product);
-                                    addStringToSF(producto, listProducts);
+                                    _zocoKarrito.add(product);
+                                    addListStringToSF(_zocoKarrito);
                                     FocusScope.of(context).unfocus();
                                   });
                                 })),
@@ -266,6 +280,7 @@ class _PageListState extends State<PageList> {
     );
   }
 
+  //LISTA DE PRODUCTOS, CON PRECIOS
   Widget boxlistproducts() {
     return Container(
       child: Column(
@@ -283,27 +298,73 @@ class _PageListState extends State<PageList> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
+          Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.yellow),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.shopping_bag),
-                    Expanded(
-                      child: Text(
-                        "Total a pagar: \$" + _total.toStringAsFixed(2),
-                        style: TextStyle(
-                            fontSize: 30, fontStyle: FontStyle.italic),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.yellow),
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.add),
+                              Expanded(
+                                child: FlatButton(
+                                  child: Text("Sumar productos"),
+                                  onPressed: () {
+                                    setState(() {
+                                      _total = 0;
+                                      for (var i = 0;
+                                          i < _zocoKarrito.length;
+                                          i++) {
+                                        _total += _zocoKarrito[i].price == null
+                                            ? 0
+                                            : _zocoKarrito[i].price;
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.yellow),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.shopping_bag),
+                              Expanded(
+                                child: Text(
+                                  "Total \$" + _total.toStringAsFixed(2),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           )
@@ -312,6 +373,7 @@ class _PageListState extends State<PageList> {
     );
   }
 
+  //LOGICA QUE PREGUNTA SI HAY DATOS GUARDADOS PARA MOSTRARLOS AL INICIAR LA APLICACIÓN
   Widget productsSave() {
     return Container(
       child: FutureBuilder(
@@ -327,9 +389,10 @@ class _PageListState extends State<PageList> {
                 temp.name = item;
                 temp.color = Colors.white;
                 temp.value = false;
-                _kartlist.add(temp);
+                _zocoKarrito.add(temp);
                 i++;
               }
+              // print(_zocoKarrito);
               return Column(children: [
                 Expanded(
                   child: Container(child: boxlistproducts()),
@@ -343,19 +406,24 @@ class _PageListState extends State<PageList> {
   }
 }
 
+//LIMPIA LOCAL STORAGE DEL CEL (SharedPreferences)
 cleanSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.clear();
 }
 
-addStringToSF(String producto, List<String> listProducts) async {
+//AGREGAMOS PRODUCTOS AL LOCAL STORAGE DEL CEL (SharedPreferences)
+addListStringToSF(List<Product> listProducts) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.clear();
-  listProducts.add(producto);
-  // print("Lista:" + json.encode(listProducts));
-  prefs.setStringList('my_string_list_key', listProducts);
+  List<String> newListProducts = [];
+  for (var item in listProducts) {
+    newListProducts.add(item.name.toString());
+  }
+  prefs.setStringList('my_string_list_key', newListProducts);
 }
 
+//LOGICA PAR OBTENER LOS DATOS QUE TIENE EL LOCAL STORAGE
 getStringValuesSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //Return String
