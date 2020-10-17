@@ -16,7 +16,6 @@ class _PageListState extends State<PageList> {
   //DEFINO VARIABLES A UTILIZAR
   List<Product> _zocoKarrito = List();
   List<String> listProducts = List();
-  Product product = Product();
   String producto;
   String price;
   double _total = 0;
@@ -175,7 +174,7 @@ class _PageListState extends State<PageList> {
                     SweetAlert.show(context,
                         title: "Lista limpia!", style: SweetAlertStyle.success);
                     setState(() {
-                      cleanSF(); //LIMPIA SharedPreferences
+                      cleanSF();
                     });
                   })
             ]),
@@ -194,7 +193,7 @@ class _PageListState extends State<PageList> {
                     SweetAlert.show(context,
                         title: "Lista limpia!", style: SweetAlertStyle.success);
                     setState(() {
-                      _zocoKarrito.clear(); //LIMPIA LISTA
+                      _zocoKarrito.clear();
                       _total = 0;
                     });
                   })
@@ -207,6 +206,7 @@ class _PageListState extends State<PageList> {
 
   //LOGICA DE TEXTFIELD QUE AGREGA LOS PRODUCTOS A LA LISTA Y AL SharedPreferences
   Widget textfield() {
+    Product product = Product();
     return Expanded(
       child: Container(
         child: Column(
@@ -226,8 +226,7 @@ class _PageListState extends State<PageList> {
                         fontWeight: FontWeight.w300, color: Colors.black),
                     suffixIcon: IconButton(
                       onPressed: () {
-                        // FocusScope.of(context).unfocus();
-                        // _controllerTextEditing2.clear();FUTURO DESARROLLO PARA LIMPIAR EL INPUT (POSIBLE ERROR DE VERSION QUE NO FUNCIONA)
+                        // _controllerTextEditing2.clear(); Se comenta para futuro desarrollo
                       },
                       icon: Icon(Icons.clear),
                     )),
